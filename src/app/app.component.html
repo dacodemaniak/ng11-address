@@ -1,4 +1,21 @@
 <div id="app-cmp-main-div">
     <h1>{{ title }}</h1>
-  <app-home></app-home>
+    <ul>
+      <ng-container *ngFor="let address of addresses">
+        <li
+          (click)="showDetail(address)"
+        >
+          <span>{{ address.firstName }} {{ address.lastName }}</span>
+        </li>
+      </ng-container>
+    </ul>
+    <p>
+      {{ addresses.length }} éléments
+    </p>
+
+    <app-address-detail
+      class="big-address-detail"
+      [hidden]="isDetailHidden"
+      [detail]="displayedAddress"
+    ></app-address-detail>
 </div>

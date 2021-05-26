@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Address } from 'cluster';
+import { AddressInterface } from './shared/interfaces/address-interface';
 
 @Component({
   selector: 'app-root',
@@ -7,9 +9,28 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AppComponent implements OnInit {
   private _title!: string;
+  public addresses: AddressInterface[] = [];
+
+  public isDetailHidden!: boolean;
+  public displayedAddress!: AddressInterface;
 
   ngOnInit(): void {
     this._title = 'Carnet d\'adresses';
+    this.isDetailHidden = true;
+
+    this.addresses.push({
+      lastName: 'Aubert',
+      firstName: 'Jean-Luc',
+      birthDate: new Date('1968-3-30'),
+      phoneNumber: '0563214789'
+    });
+    this.addresses.push({
+      lastName: 'Bond',
+      firstName: 'James',
+      birthDate: new Date('1943-4-26'),
+      phoneNumber: '555-55-007'
+    });
+
   }
 
   public get title(): string {
@@ -18,5 +39,11 @@ export class AppComponent implements OnInit {
 
   public set title(title: string) {
     this._title = title;
+  }
+
+  public showDetail(address: AddressInterface): void {
+    console.log(`Showing ${address.lastName}`);
+    this.isDetailHidden = false;
+    this.displayedAddress = address;
   }
 }
