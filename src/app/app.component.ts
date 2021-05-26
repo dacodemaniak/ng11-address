@@ -6,10 +6,10 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-  private _title = 'address-book';
+  private _title!: string;
 
   ngOnInit(): void {
-
+    this._title = 'Carnet d\'adresses';
   }
 
   public get title(): string {
