@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { AddressInterface } from '../../interfaces/address-interface';
 
 @Component({
@@ -9,10 +9,15 @@ import { AddressInterface } from '../../interfaces/address-interface';
 export class AddressDetailComponent implements OnInit {
 
   @Input() public detail!: AddressInterface;
+  @Output() public closeMe: EventEmitter<boolean> = new EventEmitter();
 
   constructor() { }
 
   ngOnInit(): void {
+  }
+
+  public close(): void {
+    this.closeMe.emit(true);
   }
 
 }

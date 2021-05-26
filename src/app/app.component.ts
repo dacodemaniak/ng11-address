@@ -14,6 +14,8 @@ export class AppComponent implements OnInit {
   public isDetailHidden!: boolean;
   public displayedAddress!: AddressInterface;
 
+  public yearFilter = 1950;
+
   ngOnInit(): void {
     this._title = 'Carnet d\'adresses';
     this.isDetailHidden = true;
@@ -45,5 +47,25 @@ export class AppComponent implements OnInit {
     console.log(`Showing ${address.lastName}`);
     this.isDetailHidden = false;
     this.displayedAddress = address;
+  }
+
+  public hideDetail(hide: boolean): void {
+    this.isDetailHidden = hide;
+  }
+
+  public filteredItems(): number {
+    return this.addresses
+      .filter(
+        (address: AddressInterface) => address.birthDate.getFullYear() > this.yearFilter
+      ).length;
+
+    // Old way
+    const filteredDatas: AddressInterface[] = [];
+    for (let i = 0; i < this.addresses.length; i++) {
+      if (this.addresses[i].birthDate.getFullYear() > this.yearFilter) {
+        filteredDatas.push(this.addresses[i]);
+      }
+    }
+    return filteredDatas.length;
   }
 }

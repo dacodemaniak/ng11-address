@@ -4,18 +4,21 @@
       <ng-container *ngFor="let address of addresses">
         <li
           (click)="showDetail(address)"
+          *ngIf="address.birthDate.getFullYear() > yearFilter"
         >
           <span>{{ address.firstName }} {{ address.lastName }}</span>
         </li>
       </ng-container>
     </ul>
+
     <p>
-      {{ addresses.length }} éléments
+      {{ filteredItems() }} / {{ addresses.length }} éléments
     </p>
 
     <app-address-detail
       class="big-address-detail"
       [hidden]="isDetailHidden"
       [detail]="displayedAddress"
+      (closeMe)="hideDetail($event)"
     ></app-address-detail>
 </div>
