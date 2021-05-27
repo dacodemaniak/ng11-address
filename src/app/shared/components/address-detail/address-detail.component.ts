@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { AddressInterface } from '../../interfaces/address-interface';
+import { AddressService } from '../../services/address.service';
 
 @Component({
   selector: 'app-address-detail',
@@ -11,7 +12,9 @@ export class AddressDetailComponent implements OnInit {
   @Input() public detail!: AddressInterface;
   @Output() public closeMe: EventEmitter<boolean> = new EventEmitter();
 
-  constructor() { }
+  constructor(
+    private addressService: AddressService
+  ) { }
 
   ngOnInit(): void {
   }

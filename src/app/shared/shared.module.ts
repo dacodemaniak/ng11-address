@@ -6,6 +6,7 @@ import {ToolbarModule} from 'primeng/toolbar';
 import {ButtonModule} from 'primeng/button';
 
 import { HeaderComponent } from './components/header/header.component';
+import { AddressService } from './services/address.service';
 
 
 const primes = [
@@ -23,6 +24,7 @@ const primes = [
   exports: [
     HeaderComponent,
     ...primes
-  ]
+  ],
+  providers: []
 })
 export class SharedModule { }

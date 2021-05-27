@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AddressInterface } from './shared/interfaces/address-interface';
+import { AddressService } from './shared/services/address.service';
 
 @Component({
   selector: 'app-root',
@@ -15,22 +16,15 @@ export class AppComponent implements OnInit {
 
   public static yearFilter = 1900;
 
+  public constructor(
+    private addressService: AddressService
+  ) {}
+
   ngOnInit(): void {
     this._title = 'Carnet d\'adresses';
     this.isDetailHidden = true;
 
-    this.addresses.push({
-      lastName: 'Aubert',
-      firstName: 'Jean-Luc',
-      birthDate: new Date('1968-3-30'),
-      phoneNumber: '0563214789'
-    });
-    this.addresses.push({
-      lastName: 'Bond',
-      firstName: 'James',
-      birthDate: new Date('1943-4-26'),
-      phoneNumber: '555-55-007'
-    });
+    this.addresses = this.addressService.findAll();
 
   }
 
@@ -65,5 +59,17 @@ export class AppComponent implements OnInit {
 
   public birthDateFilter(address: AddressInterface): boolean {
     return address.birthDate.getFullYear() > AppComponent.yearFilter;
+  }
+
+  public add(): void {
+    const newAddress: AddressInterface = {
+      lastName: 'Bauer',
+      firstName: 'Jack',
+      birthDate: new Date(1999, 6, 30),
+      phoneNumber: '555 88 999 520'
+    };
+    this.addressService.add(newAddress);
+
+    console.log(`Brand new address is : ${JSON.stringify(newAddress)}`);
   }
 }

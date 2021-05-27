@@ -17,6 +17,8 @@
       {{ filteredItems() }} / {{ addresses.length }} éléments
     </p>
 
+    <p-button label="Ajouter" (click)="add()"></p-button>
+
     <app-address-detail
       class="big-address-detail"
       [hidden]="isDetailHidden"
