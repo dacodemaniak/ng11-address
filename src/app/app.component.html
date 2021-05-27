@@ -4,7 +4,7 @@
       <ng-container *ngFor="let address of addresses">
         <li
           (click)="showDetail(address)"
-          *ngIf="address.birthDate.getFullYear() > yearFilter"
+          *ngIf="birthDateFilter(address)"
         >
           <span>{{ address.firstName }} {{ address.lastName }}</span>
         </li>

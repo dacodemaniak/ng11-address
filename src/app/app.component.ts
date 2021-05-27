@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Address } from 'cluster';
 import { AddressInterface } from './shared/interfaces/address-interface';
 
 @Component({
@@ -14,7 +13,7 @@ export class AppComponent implements OnInit {
   public isDetailHidden!: boolean;
   public displayedAddress!: AddressInterface;
 
-  public yearFilter = 1950;
+  public static yearFilter = 1950;
 
   ngOnInit(): void {
     this._title = 'Carnet d\'adresses';
@@ -56,16 +55,11 @@ export class AppComponent implements OnInit {
   public filteredItems(): number {
     return this.addresses
       .filter(
-        (address: AddressInterface) => address.birthDate.getFullYear() > this.yearFilter
+        this.birthDateFilter
       ).length;
+  }
 
-    // Old way
-    const filteredDatas: AddressInterface[] = [];
-    for (let i = 0; i < this.addresses.length; i++) {
-      if (this.addresses[i].birthDate.getFullYear() > this.yearFilter) {
-        filteredDatas.push(this.addresses[i]);
-      }
-    }
-    return filteredDatas.length;
+  public birthDateFilter(address: AddressInterface): boolean {
+    return address.birthDate.getFullYear() > AppComponent.yearFilter;
   }
 }
