@@ -13,7 +13,7 @@ export class AppComponent implements OnInit {
   public isDetailHidden!: boolean;
   public displayedAddress!: AddressInterface;
 
-  public static yearFilter = 1950;
+  public static yearFilter = 1900;
 
   ngOnInit(): void {
     this._title = 'Carnet d\'adresses';
@@ -40,6 +40,10 @@ export class AppComponent implements OnInit {
 
   public set title(title: string) {
     this._title = title;
+  }
+
+  public getYear(): number {
+    return AppComponent.yearFilter;
   }
 
   public showDetail(address: AddressInterface): void {
