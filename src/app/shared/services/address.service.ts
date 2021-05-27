@@ -25,7 +25,7 @@ export class AddressService {
     const nextId: number = this.addressList
       .sort((a1: AddressInterface, a2: AddressInterface) => a2.id! - a1.id!)[0].id! + 1;
 
-    address.id = nextId !== undefined ? nextId : 1;
+    address.id = !isNaN(nextId) ? nextId : 1;
 
     this.addressList.push(address);
 
