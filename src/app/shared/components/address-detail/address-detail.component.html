@@ -1,12 +1,16 @@
-<div *ngIf="detail">
-  <p>Nom: {{ detail.lastName | uppercase }}</p>
-  <p>Prénom: {{ detail.firstName }}</p>
-  <p>
-    Né(e) le: {{ detail.birthDate | date: 'dd-MM-yyyy' }}<br>
-    ({{ detail.birthDate | age | async }})
-  </p>
-  <p>Téléphone: {{ detail.phoneNumber }}</p>
+<div *ngIf="detail" class="content-section implementation">
+  <p-card header="Simple Card" [style]="{'width': '25rem', 'margin-bottom': '2em'}">
+    <p>Nom: {{ detail.lastName | uppercase }}</p>
+    <p>Prénom: {{ detail.firstName }}</p>
+  </p-card>
+
+  <p-card header="Advanced Card" subheader="Card Subheader" [style]="{width: '360px'}" styleClass="p-card-shadow">
+    <p>
+      Né(e) le: {{ detail.birthDate | date: 'dd-MM-yyyy' }}<br>
+      ({{ detail.birthDate | age | async }})
+    </p>
+    <p>Téléphone: {{ detail.phoneNumber }}</p>
+  </p-card>
+  <p-button label="Fermer" type="button" (click)="close()"></p-button>
 </div>
-<button type="button" (click)="close()">
-  Fermer
-</button>
+

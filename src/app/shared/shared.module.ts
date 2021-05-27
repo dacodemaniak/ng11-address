@@ -1,22 +1,28 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { MatToolbarModule } from '@angular/material/toolbar';
+import { CardModule } from 'primeng/card';
+import {ToolbarModule} from 'primeng/toolbar';
+import {ButtonModule} from 'primeng/button';
+
 import { HeaderComponent } from './components/header/header.component';
 
-const materials = [
-  MatToolbarModule
+
+const primes = [
+  CardModule,
+  ToolbarModule,
+  ButtonModule
 ];
 
 @NgModule({
   declarations: [HeaderComponent],
   imports: [
     CommonModule,
-    ...materials
+    ...primes
   ],
   exports: [
-    ...materials,
-    HeaderComponent
+    HeaderComponent,
+    ...primes
   ]
 })
 export class SharedModule { }
