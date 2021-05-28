@@ -19,12 +19,12 @@
 
     <p-button label="Ajouter" (click)="add()"></p-button>
 
-    <app-address-detail
+    <app-inline-address-detail
       class="big-address-detail"
       [hidden]="isDetailHidden"
       [detail]="displayedAddress"
       (closeMe)="hideDetail($event)"
-    ></app-address-detail>
+    ></app-inline-address-detail>
 
     <app-add-address
     ></app-add-address>
@@ -33,8 +33,13 @@
     <ng-container *ngIf="(addressList$ | async).length">
       <ul>
         <li *ngFor="let address of addressList$ | async">
-          {{ address.id }} {{ address.lastName }}
+          <a [routerLink]="['detail', address.id]">
+            {{ address.id }} {{ address.lastName }}
+          </a>
         </li>
       </ul>
     </ng-container>
+
+    <!-- Etagère à route -->
+    <router-outlet></router-outlet>
 </div>

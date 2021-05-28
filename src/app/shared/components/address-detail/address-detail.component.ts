@@ -3,7 +3,7 @@ import { AddressInterface } from '../../interfaces/address-interface';
 import { AddressService } from '../../services/address.service';
 
 @Component({
-  selector: 'app-address-detail',
+  selector: 'app-inline-address-detail',
   templateUrl: './address-detail.component.html',
   styleUrls: ['./address-detail.component.scss']
 })
