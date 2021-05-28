@@ -33,6 +33,10 @@ class FakeBackendService implements HttpInterceptor {
           return of(new HttpResponse({status: 200, body: addresses}));
         case addressRegex.test(url) && method === 'POST':
           console.log(`Have to add an entry`);
+          const nextId: number = addresses.length ?
+            addresses.sort((a1: any, a2: any) => a2.id - a1.id)[0].id + 1
+            : 1;
+          body.id = nextId;
           addresses.push(body);
           localStorage.setItem('address-book', JSON.stringify(addresses));
           return of(new HttpResponse({status: 201, body}));

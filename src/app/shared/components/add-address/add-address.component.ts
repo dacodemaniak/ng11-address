@@ -38,9 +38,14 @@ export class AddAddressComponent implements OnInit {
     console.log(`New address : ${JSON.stringify(newAddress)}`);
     this.addressService
       .add(newAddress)
-      .subscribe((address: any) => {
-        console.log(`Ca y est, c'est bon !`);
-        this.address.emit(newAddress);
+      .subscribe((address: AddressInterface | null) => {
+        console.log(`Ca y est, c'est bon ! ${JSON.stringify(address)}`);
+        if (address) {
+          this.address.emit(address);
+        } else {
+          this.address.emit();
+        }
+
       });
   }
 

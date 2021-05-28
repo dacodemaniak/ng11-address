@@ -27,6 +27,14 @@
     ></app-address-detail>
 
     <app-add-address
-      (address)="newAddress($event)"
     ></app-add-address>
+
+    <!-- Dynamic with Subject -->
+    <ng-container *ngIf="(addressList$ | async).length">
+      <ul>
+        <li *ngFor="let address of addressList$ | async">
+          {{ address.id }} {{ address.lastName }}
+        </li>
+      </ul>
+    </ng-container>
 </div>

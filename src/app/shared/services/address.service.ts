@@ -1,6 +1,6 @@
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 import { AddressInterface } from '../interfaces/address-interface';
 import { AddressModel } from '../models/address-model';
@@ -11,11 +11,16 @@ import { AddressModel } from '../models/address-model';
 export class AddressService {
 
   private addressList: AddressInterface[] = [];
+  private addressSubject$: BehaviorSubject<AddressInterface[] | any> = new BehaviorSubject([]);
 
   constructor(
     private httpClient: HttpClient
   ) {
     this.populate();
+  }
+
+  public get addressSubject(): BehaviorSubject<AddressInterface[] | any> {
+    return this.addressSubject$;
   }
 
   public findAll(): Observable<AddressInterface[]> {
@@ -47,6 +52,11 @@ export class AddressService {
       map((response: HttpResponse<any>) => {
         if (response.status === 201) {
           console.log(`Got ${JSON.stringify(response.body)} from backend`);
+          const oneMoreAddress: AddressInterface[] = [...this.addressSubject$.getValue()];
+          oneMoreAddress.push(response.body);
+          this.addressSubject$.next(
+            oneMoreAddress
+          );
           return new AddressModel().deserialize(response.body);
         }
         return null;
@@ -55,17 +65,15 @@ export class AddressService {
   }
 
   private populate(): void {
-    this.addressList.push({
-      lastName: 'Aubert',
-      firstName: 'Jean-Luc',
-      birthDate: new Date('1968-3-30'),
-      phoneNumber: '0563214789'
-    });
-    this.addressList.push({
-      lastName: 'Bond',
-      firstName: 'James',
-      birthDate: new Date('1943-4-26'),
-      phoneNumber: '555-55-007'
+    this.httpClient.get(
+      'http://localhost:4200/api/v1/address'
+    ).pipe(
+      take(1),
+      map((result: any) => {
+        return result.map((element: any) => new AddressModel().deserialize(element));
+      })
+    ).subscribe((addresses: AddressInterface[]) => {
+      this.addressSubject$.next(addresses);
     });
   }
 }

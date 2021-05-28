@@ -14,6 +14,10 @@ export class AddressModel implements AddressInterface {
       }
     }
     this.birthDate = new Date(datas.birthDate);
+
+    if (datas.hasOwnProperty('id')) {
+      this.id = datas.id;
+    }
     return this;
   }
 }

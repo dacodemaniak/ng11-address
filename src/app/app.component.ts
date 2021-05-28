@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { BehaviorSubject, Subscription } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { AddressInterface } from './shared/interfaces/address-interface';
 import { AddressService } from './shared/services/address.service';
@@ -20,6 +20,8 @@ export class AppComponent implements OnInit, OnDestroy {
 
   private subscription!: Subscription;
 
+  public addressList$!: BehaviorSubject<AddressInterface[] | any>;
+
   public constructor(
     private addressService: AddressService
   ) {}
@@ -33,6 +35,8 @@ export class AppComponent implements OnInit, OnDestroy {
       .subscribe((results: AddressInterface[]) => {
         this.addresses = results;
       });
+
+    this.addressList$ = this.addressService.addressSubject;
   }
 
   ngOnDestroy(): void {
