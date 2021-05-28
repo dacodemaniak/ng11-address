@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { BehaviorSubject, Subscription } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { AddressInterface } from './shared/interfaces/address-interface';
 import { AddressService } from './shared/services/address.service';
@@ -8,7 +9,7 @@ import { AddressService } from './shared/services/address.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
   private _title!: string;
   public addresses: AddressInterface[] = [];
 
@@ -16,6 +17,10 @@ export class AppComponent implements OnInit {
   public displayedAddress!: AddressInterface;
 
   public static yearFilter = 1900;
+
+  private subscription!: Subscription;
+
+  public addressList$!: BehaviorSubject<AddressInterface[] | any>;
 
   public constructor(
     private addressService: AddressService
@@ -25,15 +30,21 @@ export class AppComponent implements OnInit {
     this._title = 'Carnet d\'adresses';
     this.isDetailHidden = true;
 
-    this.addressService
+    this.subscription = this.addressService
       .findAll()
-      .pipe(
-        take(1)
-      )
       .subscribe((results: AddressInterface[]) => {
         this.addresses = results;
       });
 
+    this.addressList$ = this.addressService.addressSubject;
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
+  }
+
+  public newAddress(address: AddressInterface): void {
+    this.addresses.push(address);
   }
 
   public get title(): string {

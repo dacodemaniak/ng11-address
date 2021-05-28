@@ -1,8 +1,9 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 import { AddressInterface } from '../interfaces/address-interface';
+import { AddressModel } from '../models/address-model';
 
 @Injectable({
   providedIn: 'root'
@@ -10,6 +11,7 @@ import { AddressInterface } from '../interfaces/address-interface';
 export class AddressService {
 
   private addressList: AddressInterface[] = [];
+  private addressSubject$: BehaviorSubject<AddressInterface[] | any> = new BehaviorSubject([]);
 
   constructor(
     private httpClient: HttpClient
@@ -17,14 +19,18 @@ export class AddressService {
     this.populate();
   }
 
+  public get addressSubject(): BehaviorSubject<AddressInterface[] | any> {
+    return this.addressSubject$;
+  }
+
   public findAll(): Observable<AddressInterface[]> {
     return this.httpClient.get(
       'http://localhost:4200/api/v1/address'
     ).pipe(
       take(1),
-      map((result) => {
+      map((result: any) => {
         console.log(`Got : ${JSON.stringify(result)} from backend`);
-        return this.addressList;
+        return result.map((element: any) => new AddressModel().deserialize(element));
       })
     );
   }
@@ -34,30 +40,40 @@ export class AddressService {
       .find((obj: AddressInterface) => obj.id === id);
   }
 
-  public add(address: AddressInterface): AddressInterface {
-    const nextId: number = this.addressList
-      .sort((a1: AddressInterface, a2: AddressInterface) => a2.id! - a1.id!)[0].id! + 1;
-
-    address.id = !isNaN(nextId) ? nextId : 1;
-
-    this.addressList.push(address);
-
-    return address;
-
+  public add(address: AddressInterface): Observable<AddressInterface | null> {
+    return this.httpClient.post(
+      'http://localhost:4200/api/v1/address',
+      address,
+      {
+        observe: 'response'
+      }
+    ).pipe(
+      take(1),
+      map((response: HttpResponse<any>) => {
+        if (response.status === 201) {
+          console.log(`Got ${JSON.stringify(response.body)} from backend`);
+          const oneMoreAddress: AddressInterface[] = [...this.addressSubject$.getValue()];
+          oneMoreAddress.push(response.body);
+          this.addressSubject$.next(
+            oneMoreAddress
+          );
+          return new AddressModel().deserialize(response.body);
+        }
+        return null;
+      })
+    );
   }
 
   private populate(): void {
-    this.addressList.push({
-      lastName: 'Aubert',
-      firstName: 'Jean-Luc',
-      birthDate: new Date('1968-3-30'),
-      phoneNumber: '0563214789'
-    });
-    this.addressList.push({
-      lastName: 'Bond',
-      firstName: 'James',
-      birthDate: new Date('1943-4-26'),
-      phoneNumber: '555-55-007'
+    this.httpClient.get(
+      'http://localhost:4200/api/v1/address'
+    ).pipe(
+      take(1),
+      map((result: any) => {
+        return result.map((element: any) => new AddressModel().deserialize(element));
+      })
+    ).subscribe((addresses: AddressInterface[]) => {
+      this.addressSubject$.next(addresses);
     });
   }
 }

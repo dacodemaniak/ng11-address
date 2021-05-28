@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AddressInterface } from '../../interfaces/address-interface';
 import { AddressModel } from '../../models/address-model';
@@ -13,6 +13,8 @@ export class AddAddressComponent implements OnInit {
 
   public addressForm!: FormGroup;
   public maxDate: Date = new Date();
+  @Output() public address: EventEmitter<AddressInterface> = new EventEmitter();
+
   constructor(
     private formBuilder: FormBuilder,
     private addressService: AddressService
@@ -34,7 +36,17 @@ export class AddAddressComponent implements OnInit {
   public doSubmit(): void {
     const newAddress: AddressInterface = new AddressModel().deserialize(this.addressForm.value);
     console.log(`New address : ${JSON.stringify(newAddress)}`);
-    this.addressService.add(newAddress);
+    this.addressService
+      .add(newAddress)
+      .subscribe((address: AddressInterface | null) => {
+        console.log(`Ca y est, c'est bon ! ${JSON.stringify(address)}`);
+        if (address) {
+          this.address.emit(address);
+        } else {
+          this.address.emit();
+        }
+
+      });
   }
 
 }
