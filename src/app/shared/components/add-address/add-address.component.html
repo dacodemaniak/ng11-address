@@ -1,0 +1,31 @@
+<form [formGroup]="addressForm" (ngSubmit)="doSubmit()">
+  <div class="formGroup">
+    <input formControlName="lastName" placeholder="Nom..." pInputText>
+    <div class="error" *ngIf="c.lastName.errors && c.lastName.touched">
+      Le nom est obligatoire !
+    </div>
+  </div>
+
+  <div class="formGroup">
+    <input formControlName="firstName" placeholder="Prénom..." pInputText>
+  </div>
+
+  <div class="formGroup">
+    <p-calendar
+      formControlName="birthDate"
+      type="date"
+      placeholder="Date de naissance..."
+      [maxDate]="maxDate"
+    ></p-calendar>
+  </div>
+
+  <div class="formGroup">
+    <input formControlName="phoneNumber" placeholder="Téléphone..." pInputText>
+  </div>
+
+  <button type="submit" pButton pRipple [disabled]="addressForm.invalid">
+    Valider
+  </button>
+</form>
+
+{{ addressForm.value | json }}

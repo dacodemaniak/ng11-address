@@ -1,0 +1,25 @@
+$default-margin: .5em;
+
+form {
+  .formGroup {
+    display: block;
+    margin-bottom: $default-margin;
+
+    .error {
+      color: rgba(255, 10, 10, .8);
+      font-size: .8em;
+    }
+  }
+}
+
+
+/**
+:root {
+  --default-margin: .5em;
+}
+
+form .formGroup {
+  display: block;
+  margin-bottom: var(--default-margin);
+}
+*/
