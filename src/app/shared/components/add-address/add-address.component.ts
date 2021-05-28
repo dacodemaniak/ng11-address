@@ -34,7 +34,11 @@ export class AddAddressComponent implements OnInit {
   public doSubmit(): void {
     const newAddress: AddressInterface = new AddressModel().deserialize(this.addressForm.value);
     console.log(`New address : ${JSON.stringify(newAddress)}`);
-    this.addressService.add(newAddress);
+    this.addressService
+      .add(newAddress)
+      .subscribe((address: any) => {
+        console.log(`Ca y est, c'est bon !`)
+      });
   }
 
 }

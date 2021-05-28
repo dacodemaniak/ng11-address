@@ -1,8 +1,9 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 import { AddressInterface } from '../interfaces/address-interface';
+import { AddressModel } from '../models/address-model';
 
 @Injectable({
   providedIn: 'root'
@@ -22,9 +23,9 @@ export class AddressService {
       'http://localhost:4200/api/v1/address'
     ).pipe(
       take(1),
-      map((result) => {
+      map((result: any) => {
         console.log(`Got : ${JSON.stringify(result)} from backend`);
-        return this.addressList;
+        return result.map((element: any) => new AddressModel().deserialize(element));
       })
     );
   }
@@ -34,16 +35,23 @@ export class AddressService {
       .find((obj: AddressInterface) => obj.id === id);
   }
 
-  public add(address: AddressInterface): AddressInterface {
-    const nextId: number = this.addressList
-      .sort((a1: AddressInterface, a2: AddressInterface) => a2.id! - a1.id!)[0].id! + 1;
-
-    address.id = !isNaN(nextId) ? nextId : 1;
-
-    this.addressList.push(address);
-
-    return address;
-
+  public add(address: AddressInterface): Observable<AddressInterface | null> {
+    return this.httpClient.post(
+      'http://localhost:4200/api/v1/address',
+      address,
+      {
+        observe: 'response'
+      }
+    ).pipe(
+      take(1),
+      map((response: HttpResponse<any>) => {
+        if (response.status === 201) {
+          console.log(`Got ${JSON.stringify(response.body)} from backend`);
+          return new AddressModel().deserialize(response.body);
+        }
+        return null;
+      })
+    );
   }
 
   private populate(): void {
