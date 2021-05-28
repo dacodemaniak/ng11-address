@@ -26,5 +26,7 @@
       (closeMe)="hideDetail($event)"
     ></app-address-detail>
 
-    <app-add-address></app-add-address>
+    <app-add-address
+      (address)="newAddress($event)"
+    ></app-add-address>
 </div>

@@ -39,6 +39,10 @@ export class AppComponent implements OnInit, OnDestroy {
     this.subscription.unsubscribe();
   }
 
+  public newAddress(address: AddressInterface): void {
+    this.addresses.push(address);
+  }
+
   public get title(): string {
     return this._title;
   }

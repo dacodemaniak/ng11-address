@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AddressInterface } from '../../interfaces/address-interface';
 import { AddressModel } from '../../models/address-model';
@@ -13,6 +13,8 @@ export class AddAddressComponent implements OnInit {
 
   public addressForm!: FormGroup;
   public maxDate: Date = new Date();
+  @Output() public address: EventEmitter<AddressInterface> = new EventEmitter();
+
   constructor(
     private formBuilder: FormBuilder,
     private addressService: AddressService
@@ -37,7 +39,8 @@ export class AddAddressComponent implements OnInit {
     this.addressService
       .add(newAddress)
       .subscribe((address: any) => {
-        console.log(`Ca y est, c'est bon !`)
+        console.log(`Ca y est, c'est bon !`);
+        this.address.emit(newAddress);
       });
   }
 
