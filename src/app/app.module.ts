@@ -9,6 +9,7 @@ import { AddressDetailComponent } from './shared/components/address-detail/addre
 import { AgePipe } from './shared/pipes/age.pipe';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SharedModule } from './shared/shared.module';
+import { fakeBackendProvider } from './shared/services/fake-backend.service';
 
 
 @NgModule({
@@ -25,7 +26,9 @@ import { SharedModule } from './shared/shared.module';
     BrowserAnimationsModule,
     SharedModule
   ],
-  providers: [],
+  providers: [
+    fakeBackendProvider
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

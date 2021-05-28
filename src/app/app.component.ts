@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { take } from 'rxjs/operators';
 import { AddressInterface } from './shared/interfaces/address-interface';
 import { AddressService } from './shared/services/address.service';
 
@@ -24,7 +25,14 @@ export class AppComponent implements OnInit {
     this._title = 'Carnet d\'adresses';
     this.isDetailHidden = true;
 
-    this.addresses = this.addressService.findAll();
+    this.addressService
+      .findAll()
+      .pipe(
+        take(1)
+      )
+      .subscribe((results: AddressInterface[]) => {
+        this.addresses = results;
+      });
 
   }
 

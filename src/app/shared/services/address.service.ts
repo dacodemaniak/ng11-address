@@ -1,4 +1,7 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable, of } from 'rxjs';
+import { map, take } from 'rxjs/operators';
 import { AddressInterface } from '../interfaces/address-interface';
 
 @Injectable({
@@ -8,12 +11,22 @@ export class AddressService {
 
   private addressList: AddressInterface[] = [];
 
-  constructor() {
+  constructor(
+    private httpClient: HttpClient
+  ) {
     this.populate();
   }
 
-  public findAll(): AddressInterface[] {
-    return this.addressList;
+  public findAll(): Observable<AddressInterface[]> {
+    return this.httpClient.get(
+      'http://localhost:4200/api/v1/address'
+    ).pipe(
+      take(1),
+      map((result) => {
+        console.log(`Got : ${JSON.stringify(result)} from backend`);
+        return this.addressList;
+      })
+    );
   }
 
   public find(id: number): AddressInterface | undefined {
